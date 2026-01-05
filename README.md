@@ -116,167 +116,30 @@ src/
 
 ## 🖼️ 界面布局
 
-基于 `ui/mod.rs` 实现的三面板布局设计（即时模式 GUI）：
+基于 `ui/mod.rs` 实现的三面板布局设计（egui 即时模式 GUI）：
 
-<div style="display: grid; grid-template-columns: 1fr; gap: 20px; max-width: 1000px; margin: 20px 0;">
-  <!-- Header -->
-  <div style="background: linear-gradient(90deg, #2a5cdb, #1e90ff); color: white; padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; animation: slideDown 0.8s ease;">
-    🔍 迷宫寻路算法演示 (Rust + egui v1.5.0)
-  </div>
+<details>
+<summary><strong>点击展开界面布局</strong></summary>
 
-  <!-- Main Layout -->
-  <div style="display: grid; grid-template-columns: 230px 1fr 230px; gap: 15px; animation: fadeIn 1s ease;">
+```mermaid
+graph TB
+    A["🔍 迷宫寻路算法演示 v1.5.0<br/>════════════════════════════════"]
     
-    <!-- Left Panel -->
-    <div style="background: #f5f5f5; border: 2px solid #ddd; border-radius: 8px; padding: 15px; overflow-y: auto; animation: slideInLeft 0.8s ease;">
-      <h4 style="margin-top: 0; color: #333;">⚙️ 控制</h4>
-      <hr style="margin: 10px 0; border: none; border-top: 1px solid #ccc;">
-      
-      <div style="margin-bottom: 15px;">
-        <strong>🎯 选择算法</strong>
-        <div style="margin: 8px 0; padding: 5px; cursor: pointer; transition: all 0.3s;">○ 🔸 DFS (深度优先)</div>
-        <div style="margin: 8px 0; padding: 5px; cursor: pointer; background: #e3f2fd; border-radius: 4px; transition: all 0.3s;">● 🔹 BFS (广度优先)</div>
-        <div style="margin: 8px 0; padding: 5px; cursor: pointer; transition: all 0.3s;">○ 🔷 DBFS (双向BFS)</div>
-        <div style="margin: 8px 0; padding: 5px; cursor: pointer; transition: all 0.3s;">○ ⭐ A* (启发式)</div>
-      </div>
+    A --> B["三面板布局"]
+    
+    B --> L["左侧控制面板<br/>ui/mod.rs::left_panel<br/>━━━━━━━━━<br/>🎯 选择算法<br/>○ DFS  ● BFS<br/>○ DBFS ○ A*<br/><br/>🎮 操作<br/>▶ 开始搜索<br/>⏸ 暂停/继续<br/>⏮ 上一步 ⏭ 下一步<br/>🔄 重置 🎲 新地图<br/><br/>⏱ 播放参数<br/>动画速度: ████░░ 10ms<br/>每帧步数: ██░░░░░ 5<br/>☑ 显示路径箭头"]
+    
+    B --> C["中央迷宫区域<br/>render/mod.rs<br/>━━━━━━━━━<br/>实时迷宫渲染<br/>⬛⬛⬛⬛⬛<br/>⬛🟡🔵🔵⬛<br/>⬛⬛🟢⬜⬛<br/>⬛⬜⬜⬜🟡<br/>⬛⬛⬛⬛⬛<br/><br/>🔀 路径箭头叠加"]
+    
+    B --> R["右侧信息面板<br/>ui/mod.rs::right_panel<br/>━━━━━━━━━<br/>📊 统计信息<br/>算法: BFS<br/>状态: 运行中 ◉<br/>自动播放: 是<br/>步骤: 234/1000<br/>找到路径: ✅<br/>路径长度: 89<br/>耗时: 45ms<br/><br/>🎨 颜色说明<br/>■ 墙  □ 通道<br/>■ 起点/终点(黄)<br/>■ 已访问(蓝)<br/>■ 回溯(红)<br/>■ 最终路径(青)<br/><br/>⌨ 快捷键<br/>空格: 开始/暂停<br/>R: 重置 N: 新地图"]
+    
+    style A fill:#2a5cdb,stroke:#1e90ff,color:#fff,stroke-width:3px
+    style L fill:#f5f5f5,stroke:#ddd,stroke-width:2px
+    style C fill:#667eea,stroke:#764ba2,stroke-width:2px,color:#fff
+    style R fill:#f5f5f5,stroke:#ddd,stroke-width:2px
+```
 
-      <hr style="margin: 10px 0; border: none; border-top: 1px solid #ccc;">
-
-      <div style="margin-bottom: 15px;">
-        <strong>🎮 操作</strong>
-        <div style="margin: 5px 0;"><button style="width: 100%; padding: 6px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; transition: all 0.2s; font-weight: bold;">▶ 开始搜索</button></div>
-        <div style="margin: 5px 0;"><button style="width: 100%; padding: 6px; background: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer; transition: all 0.2s;">⏸ 暂停/继续</button></div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
-          <button style="padding: 6px; background: #FF9800; color: white; border: none; border-radius: 4px; cursor: pointer;">⏮ 上一步</button>
-          <button style="padding: 6px; background: #FF9800; color: white; border: none; border-radius: 4px; cursor: pointer;">⏭ 下一步</button>
-        </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 5px;">
-          <button style="padding: 6px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer;">🔄 重置</button>
-          <button style="padding: 6px; background: #9C27B0; color: white; border: none; border-radius: 4px; cursor: pointer;">🎲 新地图</button>
-        </div>
-      </div>
-
-      <hr style="margin: 10px 0; border: none; border-top: 1px solid #ccc;">
-
-      <div>
-        <strong>⏱️ 播放参数</strong>
-        <div style="margin: 8px 0; font-size: 12px;">
-          动画速度: <span style="font-weight: bold;">10 ms/步</span>
-          <div style="width: 100%; height: 6px; background: #ddd; border-radius: 3px; margin: 5px 0; overflow: hidden;">
-            <div style="width: 60%; height: 100%; background: linear-gradient(90deg, #4CAF50, #81C784); animation: expand 1.5s infinite;"></div>
-          </div>
-        </div>
-        <div style="margin: 8px 0; font-size: 12px;">
-          每帧步数: <span style="font-weight: bold;">5</span>
-          <div style="width: 100%; height: 6px; background: #ddd; border-radius: 3px; margin: 5px 0; overflow: hidden;">
-            <div style="width: 30%; height: 100%; background: linear-gradient(90deg, #2196F3, #64B5F6); animation: pulse 2s infinite;"></div>
-          </div>
-        </div>
-        <div style="margin: 8px 0;">
-          <label style="display: flex; align-items: center; cursor: pointer;">
-            <input type="checkbox" checked style="margin-right: 8px;">
-            <span>🔀 显示路径箭头</span>
-          </label>
-        </div>
-      </div>
-    </div>
-
-    <!-- Center Panel - Maze -->
-    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; padding: 15px; display: flex; align-items: center; justify-content: center; min-height: 400px; position: relative; overflow: hidden; animation: slideInUp 0.8s ease;">
-      <div style="font-size: 32px; opacity: 0.3; animation: float 3s ease-in-out infinite;">迷宫区域</div>
-      <!-- Animated maze grid -->
-      <div style="position: absolute; top: 20px; left: 20px; display: grid; grid-template-columns: repeat(8, 20px); gap: 2px; animation: fadeIn 1.2s ease;">
-        <div style="width: 20px; height: 20px; background: #000;"></div>
-        <div style="width: 20px; height: 20px; background: #000;"></div>
-        <div style="width: 20px; height: 20px; background: #000;"></div>
-        <div style="width: 20px; height: 20px; background: #000;"></div>
-        <div style="width: 20px; height: 20px; background: #000;"></div>
-        <div style="width: 20px; height: 20px; background: #000;"></div>
-        <div style="width: 20px; height: 20px; background: #000;"></div>
-        <div style="width: 20px; height: 20px; background: #000;"></div>
-        <div style="width: 20px; height: 20px; background: #000;"></div>
-        <div style="width: 20px; height: 20px; background: #FFD700; animation: pulse 1s infinite;"></div>
-        <div style="width: 20px; height: 20px; background: #87CEEB; animation: slideInRight 0.5s ease;"></div>
-        <div style="width: 20px; height: 20px; background: #87CEEB; animation: slideInRight 0.6s ease;"></div>
-        <div style="width: 20px; height: 20px; background: #FFF;"></div>
-        <div style="width: 20px; height: 20px; background: #000;"></div>
-        <div style="width: 20px; height: 20px; background: #FFF;"></div>
-        <div style="width: 20px; height: 20px; background: #000;"></div>
-      </div>
-    </div>
-
-    <!-- Right Panel -->
-    <div style="background: #f5f5f5; border: 2px solid #ddd; border-radius: 8px; padding: 15px; overflow-y: auto; animation: slideInRight 0.8s ease;">
-      <h4 style="margin-top: 0; color: #333;">📊 信息</h4>
-      <hr style="margin: 10px 0; border: none; border-top: 1px solid #ccc;">
-
-      <div style="margin-bottom: 15px; font-size: 13px;">
-        <div><strong>当前算法:</strong> BFS</div>
-        <div><strong>状态:</strong> <span style="color: #4CAF50; font-weight: bold; animation: blink 1s infinite;">运行中</span></div>
-        <div><strong>自动播放:</strong> 是</div>
-        <div><strong>步骤:</strong> 234 / 1000</div>
-        <div><strong>找到路径:</strong> ✅ 是</div>
-        <div><strong>路径长度:</strong> 89</div>
-        <div><strong>耗时:</strong> 45 ms</div>
-      </div>
-
-      <hr style="margin: 10px 0; border: none; border-top: 1px solid #ccc;">
-
-      <div style="margin-bottom: 15px;">
-        <strong>🎨 颜色说明</strong>
-        <div style="margin: 6px 0; display: flex; align-items: center;">
-          <div style="width: 16px; height: 16px; background: #000; border-radius: 2px; margin-right: 8px;"></div>
-          <span style="font-size: 12px;">墙壁</span>
-        </div>
-        <div style="margin: 6px 0; display: flex; align-items: center;">
-          <div style="width: 16px; height: 16px; background: #FFF; border: 1px solid #999; border-radius: 2px; margin-right: 8px;"></div>
-          <span style="font-size: 12px;">通道</span>
-        </div>
-        <div style="margin: 6px 0; display: flex; align-items: center;">
-          <div style="width: 16px; height: 16px; background: #FFD700; border-radius: 2px; margin-right: 8px;"></div>
-          <span style="font-size: 12px;">起点/终点</span>
-        </div>
-        <div style="margin: 6px 0; display: flex; align-items: center;">
-          <div style="width: 16px; height: 16px; background: #87CEEB; border-radius: 2px; margin-right: 8px;"></div>
-          <span style="font-size: 12px;">已访问</span>
-        </div>
-        <div style="margin: 6px 0; display: flex; align-items: center;">
-          <div style="width: 16px; height: 16px; background: #FF6A6A; border-radius: 2px; margin-right: 8px;"></div>
-          <span style="font-size: 12px;">回溯</span>
-        </div>
-        <div style="margin: 6px 0; display: flex; align-items: center;">
-          <div style="width: 16px; height: 16px; background: #7FFFD4; border-radius: 2px; margin-right: 8px;"></div>
-          <span style="font-size: 12px;">最终路径</span>
-        </div>
-      </div>
-
-      <hr style="margin: 10px 0; border: none; border-top: 1px solid #ccc;">
-
-      <div>
-        <strong>⌨️ 快捷键</strong>
-        <div style="font-size: 11px; margin-top: 8px;">
-          <div><code>Space</code> 开始/暂停</div>
-          <div><code>R</code> 重置地图</div>
-          <div><code>N</code> 生成新地图</div>
-          <div><code>←/→</code> 上一步/下一步</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<style>
-  @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-  @keyframes slideInLeft { from { transform: translateX(-20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-  @keyframes slideInRight { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-  @keyframes slideInUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-  @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-  @keyframes expand { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }
-  button:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important; }
-</style>
+</details>
 
 **布局说明（源码映射）：**
 
@@ -286,6 +149,33 @@ src/
 | **左侧控制面板** | `ui/mod.rs::left_panel()` | 230px | 算法选择、操作按钮、播放参数 |
 | **中央迷宫区域** | `render/mod.rs::sync_texture()` | 自适应 | 迷宫纹理渲染、路径箭头叠加 |
 | **右侧信息面板** | `ui/mod.rs::right_panel()` | 230px | 统计信息、颜色说明、快捷键提示 |
+
+**交互控件详解：**
+
+<table>
+  <tr>
+    <td width="50%">
+      <strong>左侧控制面板（230px 宽）</strong>
+      <ul>
+        <li><strong>选择算法</strong><br/>RadioButton 组，支持 DFS/BFS/DBFS/A* 四选一</li>
+        <li><strong>操作按钮</strong><br/>开始搜索、暂停/继续、上一步、下一步、重置、新地图</li>
+        <li><strong>播放参数</strong><br/>
+          • 动画速度滑块 (Slider)：1-100 ms/步<br/>
+          • 每帧步数滑块：1-50 步/帧<br/>
+          • 显示路径箭头复选框 (Checkbox)
+        </li>
+      </ul>
+    </td>
+    <td width="50%">
+      <strong>右侧信息面板（230px 宽）</strong>
+      <ul>
+        <li><strong>统计信息</strong><br/>实时显示当前算法、运行状态、步骤进度、路径长度、耗时</li>
+        <li><strong>颜色说明</strong><br/>彩色方块 + 文字标签，对应 6 种网格状态</li>
+        <li><strong>快捷键提示</strong><br/>快速参考表（空格、R、N、←/→）</li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
 ---
 
