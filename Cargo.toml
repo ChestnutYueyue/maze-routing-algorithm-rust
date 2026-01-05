@@ -1,0 +1,16 @@
+[package]
+name = "maze-routing-algorithm"
+version = "1.5.0"
+edition = "2021"
+authors = ["Rust Port"]
+description = "迷宫寻路算法 - 包含 DFS, BFS, 双向BFS 和 A* 算法"
+
+[dependencies]
+rand = "0.8"
+rayon = "1.10"
+eframe = "0.29"
+egui = "0.29"
+
+[[bin]]
+name = "maze-gui"
+path = "src/main.rs"
